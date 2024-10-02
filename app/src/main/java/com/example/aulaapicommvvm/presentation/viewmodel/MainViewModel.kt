@@ -3,24 +3,24 @@ package com.example.aulaapicommvvm.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.aulaapicommvvm.data.model.Postagem
-import com.example.aulaapicommvvm.data.repository.IPostagemRepository
-import com.example.aulaapicommvvm.data.repository.PostagemRepository
+import com.example.aulaapicommvvm.data.model.PostagemResposta
+import com.example.aulaapicommvvm.domain.model.Postagem
+import com.example.aulaapicommvvm.domain.usecase.PostagemUseCase
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val repository: IPostagemRepository
-): ViewModel() {
+    private val postagemUseCase: PostagemUseCase
+ ): ViewModel() {
 
     var  listaPostagens = MutableLiveData<List<Postagem>>()
-        get() = repository.listaPostagensRepository
+       // get() = repository.listaPostagensRepository
 
 
 
     fun recuperarPostagens() {
         viewModelScope.launch {
-            repository.recuperarPostagens()
-
+            val postagens = postagemUseCase.recuperarPostagens()
+            listaPostagens.postValue(postagens)
         }
     }
 }
